@@ -5,7 +5,9 @@ FROM alpine:3.18
 
 #On install nginx
 RUN apk update && apk upgrade \
-apk add --no-cache nginx
+	&& apk add --no-cache nginx
+
+RUN mkdir -p /var/www/html
 
 #On copy du serveur(local) vers le Docker (local -> docker)
 COPY ./site/index.html /var/www/html/

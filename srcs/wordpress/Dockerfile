@@ -1,18 +1,45 @@
-#ATTENTION: L'ordre d'exec des commandes est super importante!
-
-#On importe alpine
 FROM alpine:3.18
 
-#On install nginx
-RUN apk update && apk upgrade \
-apk add --no-cache nginx
+RUN apk update && apk add --no-cache \
+    wget \
+    curl \
+    bash \
+    php \
+    php-cgi \
+    php-mysqlnd \
+    php-fpm \
+    php-pdo \
+    php-gd \
+    php-cli \
+    php-mbstring \
+    redis \
+    && rm -rf /var/cache/apk/*
 
-#On copy du serveur(local) vers le Docker (local -> docker)
-COPY ./site/index.html /var/www/html/
-COPY nginx.conf /etc/nginx/nginx.conf
+# Installation de wp-cli et déplacement vers le répertoire /usr/local/bin
+RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
+    && chmod +x wp-cli.phar \
+    && mv wp-cli.phar /usr/local/bin/wp
 
-#Ca c'est juste pour te dire (ou a un autre dev) quelle port tu vas écouter
-EXPOSE 80 443
+# Copie du fichier .conf dans le répertoire approprié
+COPY ./www.conf /etc/php7/php-fpm.d/www.conf
 
-# Ca lance nginx en mode pas daemon:
-CMD ["nginx", "-g", "daemon off;"]
+# Création du répertoire pour permettre le démarrage de PHP
+RUN mkdir -p /run/php
+
+# Copie du script et attribution des permissions pour son exécution
+# COPY ./tools/create_wordpress.sh /usr/local/bin/
+# RUN chmod +x /usr/local/bin/create_wordpress.sh
+
+# Définition du point d'entrée pour le script de création de WordPress
+# ENTRYPOINT ["/usr/local/bin/create_wordpress.sh"]
+
+# Définition du répertoire de travail
+WORKDIR /var/www/html/
+
+# Exposition du port 9000 utilisé par PHP-FPM
+EXPOSE 9000
+
+ENV PATH="/usr/sbin:${PATH}"
+
+# Lancement de PHP-FPM en mode foreground (-F) pour éviter la démonisation
+CMD ["php-fpm", "-F"]

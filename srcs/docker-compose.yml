@@ -13,11 +13,19 @@ services:
     
   wordpress:
     build: ./wordpress/
+    ports:
+      - "9000:9000"
     environment:
-      WORDPRESS_DB_HOST:      db
-      WORDPRESS_DB_USER:      root
-      WORDPRESS_DB_PASSWORD:  test
-      WORDPRESS_DB_NAME:      wordpress
+      DB_HOST:      db
+      DB_USER:      root
+      DB_PASS:  test
+      DB_NAME:      wordpress
+      DB_PREFIX:    wp_
+      WP_URL:       http://42.lebojo.ch
+      WP_TITLE:     "42"
+      WP_ADMIN:     admin
+      WP_PASS:      admin
+      WP_MAIL:      jocraft2s@gmail.com
     networks:
       - wp_net
   

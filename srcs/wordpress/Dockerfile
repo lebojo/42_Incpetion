@@ -6,13 +6,14 @@ RUN apk update && apk add --no-cache \
     bash \
     php \
     php-cgi \
-    php-mysqlnd \
+    php-mysqli \
     php-fpm \
     php-pdo \
     php-gd \
     php-cli \
     php-mbstring \
-    redis \
+	php-phar \
+	mariadb-client \
     && rm -rf /var/cache/apk/*
 
 # Installation de wp-cli et déplacement vers le répertoire /usr/local/bin
@@ -21,17 +22,16 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
     && mv wp-cli.phar /usr/local/bin/wp
 
 # Copie du fichier .conf dans le répertoire approprié
-COPY ./www.conf /etc/php7/php-fpm.d/www.conf
+COPY ./www.conf /etc/php81/php-fpm.d/www.conf
 
 # Création du répertoire pour permettre le démarrage de PHP
 RUN mkdir -p /run/php
 
 # Copie du script et attribution des permissions pour son exécution
-# COPY ./tools/create_wordpress.sh /usr/local/bin/
-# RUN chmod +x /usr/local/bin/create_wordpress.sh
+COPY ./tools/create_wordpress.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/create_wordpress.sh
 
 # Définition du point d'entrée pour le script de création de WordPress
-# ENTRYPOINT ["/usr/local/bin/create_wordpress.sh"]
 
 # Définition du répertoire de travail
 WORKDIR /var/www/html/
@@ -39,7 +39,18 @@ WORKDIR /var/www/html/
 # Exposition du port 9000 utilisé par PHP-FPM
 EXPOSE 9000
 
-ENV PATH="/usr/sbin:${PATH}"
+# Création de l'utilisateur www-data
+RUN adduser -D -G www-data www-data
+
+# Attribution des permissions
+RUN chown -R www-data:www-data /var/www/html
+RUN chown -R www-data:www-data /run/php
+RUN chown -R www-data:www-data /usr/local/bin
+RUN chown -R www-data:www-data /etc/php81/php-fpm.d
+RUN chown -R www-data:www-data /var/www/html
+RUN chown -R www-data:www-data /var/log/php81
+
+USER www-data
 
 # Lancement de PHP-FPM en mode foreground (-F) pour éviter la démonisation
-CMD ["php-fpm", "-F"]
+CMD ["sh", "/usr/local/bin/create_wordpress.sh"]

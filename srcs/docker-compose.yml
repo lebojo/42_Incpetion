@@ -10,32 +10,38 @@ services:
       - wordpress
     networks:
       - wp_net
-    
+    volumes:
+      - db_data:/var/lib/mysql
+
+  db:
+    build: ./mariadb/
+    environment:
+      MYSQL_DATABASE:       wordpress
+      MYSQL_USER:           wp_user
+      MYSQL_PASSWORD:       test
+    networks:
+      - wp_net
+
   wordpress:
     build: ./wordpress/
-    ports:
-      - "9000:9000"
     environment:
       DB_HOST:      db
-      DB_USER:      root
-      DB_PASS:  test
-      DB_NAME:      wordpress
+      DB_USER:      wp_user
+      DB_PASS:      test
+      DB_NAME:      wp_db
       DB_PREFIX:    wp_
-      WP_URL:       http://42.lebojo.ch
+      WP_URL:       http://localhost
       WP_TITLE:     "42"
       WP_ADMIN:     admin
       WP_PASS:      admin
       WP_MAIL:      jocraft2s@gmail.com
     networks:
       - wp_net
-  
-  db:
-    build: ./mariadb/
-    environment:
-      MYSQL_ROOT_PASSWORD:  test
-      MYSQL_DATABASE:       wordpress
-    networks:
-      - wp_net
+    depends_on:
+      - db
 
 networks:
   wp_net:
+
+volumes:
+  db_data:

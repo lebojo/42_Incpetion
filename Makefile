@@ -8,7 +8,7 @@ all: down build up
 
 # Build and start the Docker containers
 up:
-	docker-compose -f $(COMPOSE_FILE) up -d
+	docker-compose -f $(COMPOSE_FILE) up
 
 build:
 	docker-compose -f $(COMPOSE_FILE) build

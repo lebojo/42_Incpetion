@@ -4,10 +4,7 @@ SRC := srcs/
 
 COMPOSE_FILE := $(SRC)docker-compose.yml
 
-all:
-	make down; \
-	make build; \
-	make up
+all: down build up
 
 # Build and start the Docker containers
 up:

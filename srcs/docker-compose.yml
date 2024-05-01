@@ -16,7 +16,7 @@ services:
   db:
     build: ./mariadb/
     environment:
-      MYSQL_DATABASE:       wordpress
+      MYSQL_DATABASE:       db
       MYSQL_USER:           wp_user
       MYSQL_PASSWORD:       test
     networks:
@@ -28,9 +28,9 @@ services:
       DB_HOST:      db
       DB_USER:      wp_user
       DB_PASS:      test
-      DB_NAME:      wp_db
+      DB_NAME:      db
       DB_PREFIX:    wp_
-      WP_URL:       http://localhost
+      WP_URL:       http://jchapell.42.fr
       WP_TITLE:     "42"
       WP_ADMIN:     admin
       WP_PASS:      admin

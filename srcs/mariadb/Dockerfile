@@ -16,5 +16,10 @@ EXPOSE 3306
 
 RUN mysql_install_db --user=mysql --datadir=/var/lib/mysql
 
+RUN chown -R mysql:mysql /var/lib/mysql
+
+RUN chmod 777 /var/lib/mysql
+
+
 # Démarrer le service MariaDB
-CMD ["sh", "-c", "mysqld_safe --datadir='/var/lib/mysql' & mysql -uroot < /docker-entrypoint-initdb.d/init_db.sql"]
+CMD ["sh", "-c", "mysqld_safe --datadir='/var/lib/mysql' & sleep 10 && mysql -uroot < /docker-entrypoint-initdb.d/init_db.sql && tail -f /dev/null"]

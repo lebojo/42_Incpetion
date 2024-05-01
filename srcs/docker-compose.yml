@@ -1,26 +1,18 @@
 version: '3.7'
 
+# L'ordre de lancement des services est défini par les depends_on
 services:
-  nginx:
-    build: ./nginx/
-    ports:
-      - "80:80"
-      - "443:443"
-    depends_on:
-      - wordpress
-    networks:
-      - wp_net
-    volumes:
-      - db_data:/var/lib/mysql
-
   db:
     build: ./mariadb/
     environment:
       MYSQL_DATABASE:       db
       MYSQL_USER:           wp_user
       MYSQL_PASSWORD:       test
+      MYSQL_ROOT_PASSWORD:  test
     networks:
       - wp_net
+    volumes:
+      - db_data:/var/lib/mysql
 
   wordpress:
     build: ./wordpress/
@@ -39,9 +31,26 @@ services:
       - wp_net
     depends_on:
       - db
+    volumes:
+      - wp_data:/var/www/html
+
+  nginx:
+    build: ./nginx/
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - wordpress
+    networks:
+      - wp_net
+    volumes:
+      - wp_data:/var/www/html
 
 networks:
   wp_net:
+    driver: bridge
 
 volumes:
   db_data:
+  wp_data:

@@ -20,7 +20,6 @@ CREATE TABLE IF NOT EXISTS products (
 );
 
 
-
 -- Creation de l'utilisateur
 CREATE USER 'wp_user'@'%' IDENTIFIED BY 'test';
 GRANT ALL PRIVILEGES ON `db`.* TO 'wp_user'@'%';

@@ -4,9 +4,11 @@ SRC := srcs/
 
 COMPOSE_FILE := $(SRC)docker-compose.yml
 
+all: down build up
+
 # Build and start the Docker containers
 up:
-	docker-compose -f $(COMPOSE_FILE) up -d
+	docker-compose -f $(COMPOSE_FILE) up
 
 build:
 	docker-compose -f $(COMPOSE_FILE) build
@@ -14,8 +16,6 @@ build:
 # Stop and remove the Docker containers
 down:
 	docker-compose -f $(COMPOSE_FILE) down
-
-all: down build up
 
 # Clean up the Docker containers and volumes
 clean:

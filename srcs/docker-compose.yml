@@ -11,40 +11,37 @@ services:
     networks:
       - wp_net
     volumes:
-      - wp:/var/www/html
+      - db_data:/var/lib/mysql
+
+  db:
+    build: ./mariadb/
+    environment:
+      MYSQL_DATABASE:       wordpress
+      MYSQL_USER:           wp_user
+      MYSQL_PASSWORD:       test
+    networks:
+      - wp_net
+
   wordpress:
     build: ./wordpress/
-    ports:
-      - "9000:9000"
     environment:
       DB_HOST:      db
-      DB_USER:      root
-      DB_PASS:  test
-      DB_NAME:      wordpress
+      DB_USER:      wp_user
+      DB_PASS:      test
+      DB_NAME:      wp_db
       DB_PREFIX:    wp_
-      WP_URL:       localhost
+      WP_URL:       http://localhost
       WP_TITLE:     "42"
       WP_ADMIN:     admin
       WP_PASS:      admin
       WP_MAIL:      jocraft2s@gmail.com
     networks:
       - wp_net
-    volumes:
-      - wp:/var/www/html
-  
-  db:
-    build: ./mariadb/
-    environment:
-      MYSQL_ROOT_PASSWORD:  test
-      MYSQL_DATABASE:       wordpress
-    networks:
-      - wp_net
+    depends_on:
+      - db
 
 networks:
   wp_net:
+
 volumes:
- wp:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
+  db_data:

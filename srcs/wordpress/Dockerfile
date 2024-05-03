@@ -31,11 +31,6 @@ RUN mkdir -p /run/php
 COPY ./tools/create_wordpress.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/create_wordpress.sh
 
-# Définition du point d'entrée pour le script de création de WordPress
-
-# Définition du répertoire de travail
-WORKDIR /var/www/html/
-
 # Exposition du port 9000 utilisé par PHP-FPM
 EXPOSE 9000
 
@@ -50,8 +45,9 @@ RUN chown -R www-data:www-data /usr/local/bin
 RUN chown -R www-data:www-data /etc/php81/php-fpm.d
 RUN chown -R www-data:www-data /var/log/php81
 
+USER www-data
 
-USER root
+# Définition du répertoire de travail
+WORKDIR /var/www/html/
 
-# Lancement de PHP-FPM en mode foreground (-F) pour éviter la démonisation
 CMD ["sh", "/usr/local/bin/create_wordpress.sh"]

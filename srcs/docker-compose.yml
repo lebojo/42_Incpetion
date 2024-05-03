@@ -6,7 +6,7 @@ services:
     build: ./mariadb/
     environment:
       MYSQL_DATABASE:       db
-      MYSQL_USER:           wp_user
+      MYSQL_USER:           www-data
       MYSQL_PASSWORD:       test
       MYSQL_ROOT_PASSWORD:  test
     networks:
@@ -16,11 +16,9 @@ services:
 
   wordpress:
     build: ./wordpress/
-    ports:
-      - "9000:9000"
     environment:
       DB_HOST:      db
-      DB_USER:      wp_user
+      DB_USER:      www-data
       DB_PASS:      test
       DB_NAME:      db
       DB_PREFIX:    wp_

@@ -10,7 +10,7 @@ RUN apk update && apk upgrade \
 RUN mkdir -p /var/www/html
 
 #On copy du serveur(local) vers le Docker (local -> docker)
-COPY ./site/index.html /var/www/html/
+#COPY ./site/index.html /var/www/html/
 COPY nginx.conf /etc/nginx/nginx.conf
 
 #Ca c'est juste pour te dire (ou a un autre dev) quelle port tu vas écouter

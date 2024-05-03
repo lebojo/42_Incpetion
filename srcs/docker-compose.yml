@@ -16,6 +16,8 @@ services:
 
   wordpress:
     build: ./wordpress/
+    ports:
+      - "9000:9000"
     environment:
       DB_HOST:      db
       DB_USER:      wp_user

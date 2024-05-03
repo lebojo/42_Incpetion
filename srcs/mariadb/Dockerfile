@@ -22,4 +22,4 @@ RUN chmod 777 /var/lib/mysql
 
 
 # Démarrer le service MariaDB
-CMD ["sh", "-c", "mysqld_safe --datadir='/var/lib/mysql' & sleep 10 && mysql -uroot < /docker-entrypoint-initdb.d/init_db.sql && tail -f /dev/null"]
+CMD ["sh", "-c", "mysqld_safe --datadir='/var/lib/mysql' & sleep 1 && mysql -uroot < /docker-entrypoint-initdb.d/init_db.sql && tail -f /dev/null"]

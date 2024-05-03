@@ -44,13 +44,14 @@ RUN adduser -D -G www-data www-data
 
 # Attribution des permissions
 RUN chown -R www-data:www-data /var/www/html
+RUN chmod -R 755 /var/www/html
 RUN chown -R www-data:www-data /run/php
 RUN chown -R www-data:www-data /usr/local/bin
 RUN chown -R www-data:www-data /etc/php81/php-fpm.d
-RUN chown -R www-data:www-data /var/www/html
 RUN chown -R www-data:www-data /var/log/php81
 
-USER www-data
+
+USER root
 
 # Lancement de PHP-FPM en mode foreground (-F) pour éviter la démonisation
 CMD ["sh", "/usr/local/bin/create_wordpress.sh"]

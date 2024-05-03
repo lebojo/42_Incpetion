@@ -1,4 +1,12 @@
 #!/bin/sh
-/usr/bin/mysqld_safe --datadir='/var/lib/mysql' &
-sleep 5
-mysqld --datadir='/var/lib/mysql' --user=root --init-file=/tmp/sql_setup.sh
+
+mysql -u root -p<<EOF
+CREATE DATABASE $DB_NAME;
+CREATE USER '$DB_USER'@'%' IDENTIFIED BY '$DB_PASS';
+GRANT ALL PRIVILEGES ON *.* TO '$DB_USER'@'%' IDENTIFIED BY '$DB_PASS';
+CREATE DATABASE $GITEA_DB;
+CREATE USER '$GITEA_DB_USER'@'%' IDENTIFIED BY '$GITEA_DB_PASS';
+GRANT ALL PRIVILEGES ON $GITEA_DB.* TO '$GITEA_DB_USER'@'%' IDENTIFIED BY '$GITEA_DB_PASS';
+FLUSH PRIVILEGES;
+EOF
+

@@ -34,20 +34,18 @@ RUN chmod +x /usr/local/bin/create_wordpress.sh
 # Exposition du port 9000 utilisé par PHP-FPM
 EXPOSE 9000
 
-# Création de l'utilisateur www-data
-RUN adduser -D -G www-data www-data
-
-# Attribution des permissions
-RUN chown -R www-data:www-data /var/www/html
-RUN chmod -R 755 /var/www/html
-RUN chown -R www-data:www-data /run/php
-RUN chown -R www-data:www-data /usr/local/bin
-RUN chown -R www-data:www-data /etc/php81/php-fpm.d
-RUN chown -R www-data:www-data /var/log/php81
-
-USER www-data
-
 # Définition du répertoire de travail
 WORKDIR /var/www/html/
+
+# Attribution des permissions
+RUN adduser -D -G www-data www-data && \
+	chown -R www-data:www-data /var/www/html && \
+	chmod -R 755 /var/www/html && \
+	chown -R www-data:www-data /run/php && \
+	chown -R www-data:www-data /usr/local/bin && \
+	chown -R www-data:www-data /etc/php81/php-fpm.d && \
+	chown -R www-data:www-data /var/log/php81
+
+USER www-data
 
 CMD ["sh", "/usr/local/bin/create_wordpress.sh"]

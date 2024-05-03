@@ -6,10 +6,10 @@ set -e
 # echo "DB_PASS: $DB_PASS"
 
 
-if [ ! -f /var/www/html/www-data-config.php ]; then
-	www-data core download
-	www-data config create --dbname=$DB_NAME --dbuser=$DB_USER --dbpass=$DB_PASS --dbhost=$DB_HOST --dbprefix=$DB_PREFIX
-	www-data core install --url=$www-data_URL --title="$www-data_TITLE" --admin_name=$www-data_ADMIN --admin_password=$www-data_PASS --admin_email=$www-data_MAIL
+if [ ! -f /var/www/html/wp-config.php ]; then
+	wp core download
+	wp config create --dbname=$DB_NAME --dbuser=$DB_USER --dbpass=$DB_PASS --dbhost=$DB_HOST --dbprefix=$DB_PREFIX
+	wp core install --url=$WP_URL --title="$WP_TITLE" --admin_name=$WP_ADMIN --admin_password=$WP_PASS --admin_email=$WP_MAIL
 else
 	echo "WordPress already installed"
 fi

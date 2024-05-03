@@ -18,6 +18,5 @@ EXPOSE 3306
 RUN chmod +x /tmp/entrypoint.sh
 RUN chmod +x /tmp/sql_setup.sh
 
-
 # Démarrer le service MariaDB
 CMD ["sh", "/tmp/entrypoint.sh"]

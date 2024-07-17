@@ -13,7 +13,8 @@ then
     sleep 4
     mariadb -e "CREATE DATABASE $DB_NAME ;"
     mariadb -e "CREATE USER '$DB_USER'@'%' IDENTIFIED BY '$DB_PASS';"
-    mariadb -e "GRANT ALL PRIVILEGES ON $DB_NAME.* TO '$DB_USER'@'%';"
+    mariadb -e "GRANT ALL PRIVILEGES ON *.* TO '$DB_USER'@'%' IDENTIFIED BY '$DB_PASS';"
+FLUSH PRIVILEGES;
     mariadb -e "FLUSH PRIVILEGES;"
     mysqladmin shutdown
 

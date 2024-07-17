@@ -19,4 +19,5 @@ RUN		chmod +x /tmp/wp_setup.sh
 EXPOSE	9000
 
 ENTRYPOINT ["/tmp/wp_setup.sh"]
+
 CMD ["/usr/sbin/php-fpm81", "-F"]

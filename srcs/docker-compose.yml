@@ -10,6 +10,7 @@ services:
       - wp_net
     volumes:
       - db_data:/var/lib/mysql
+    container_name: db
 
   wordpress:
     build: ./wordpress/

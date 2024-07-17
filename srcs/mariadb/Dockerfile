@@ -3,20 +3,18 @@ FROM alpine:3.18
 
 # Installer les dépendances nécessaires
 RUN apk update && \
-    apk add --no-cache mariadb mariadb-client openrc
+    apk add --no-cache mariadb mariadb-client
 
-RUN mkdir -p /tmp/
+# Créer les répertoires nécessaires
+RUN mkdir -p /run/mysqld && chown -R mysql:mysql /run/mysqld
 
 # Copier la configuration de MariaDB
-COPY 50-server.cnf /etc/mysql/mariadb.conf.d/50-server.cnf
-COPY entrypoint.sh /tmp/entrypoint.sh
-COPY sql_setup.sh /tmp/sql_setup.sh
+COPY 50-server.cnf /etc/my.cnf.d/50-server.cnf
+COPY init.sql /etc/mysql/init.sql
 
 # Exposer le port nécessaire
 EXPOSE 3306
 
-RUN chmod +x /tmp/entrypoint.sh && \
-	chmod +x /tmp/sql_setup.sh
 
 # Démarrer le service MariaDB
-CMD ["sh", "/tmp/entrypoint.sh"]
+CMD ["mysqld", "--user=mysql", "--init-file=/etc/mysql/init.sql"]

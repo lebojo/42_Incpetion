@@ -1,20 +1,17 @@
-# On importe alpine
-FROM alpine:3.18
+FROM    alpine:3.18
 
-# Installer les dépendances nécessaires
-RUN apk update && \
-    apk add --no-cache mariadb mariadb-client
+COPY    setup_db.sh /scripts/
+COPY    db-server.cnf /etc/my.cnf.d/mariadb-server.cnf
 
-# Créer les répertoires nécessaires
-RUN mkdir -p /run/mysqld && chown -R mysql:mysql /run/mysqld
-
-# Copier la configuration de MariaDB
-COPY 50-server.cnf /etc/my.cnf.d/50-server.cnf
-COPY init.sql /etc/mysql/init.sql
-
-# Exposer le port nécessaire
-EXPOSE 3306
+RUN apk update                          \
+    && apk add --no-cache bash vim mysql mysql-client \
+    && chmod +x /scripts/setup_db.sh
 
 
-# Démarrer le service MariaDB
-CMD ["mysqld", "--user=mysql", "--init-file=/etc/mysql/init.sql"]
+EXPOSE  3306
+
+STOPSIGNAL SIGTERM
+
+ENTRYPOINT [ "/scripts/setup_db.sh" ]
+
+CMD [ "/usr/bin/mariadbd-safe", "--datadir=/var/lib/mysql", "--user=mysql", "--bind-address=0.0.0.0" ]

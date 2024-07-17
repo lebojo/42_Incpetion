@@ -3,6 +3,7 @@ version: '3.7'
 # L'ordre de lancement des services est défini par les depends_on
 services:
   db:
+    container_name: db
     build: ./mariadb/
     env_file:
       - .env
@@ -10,9 +11,9 @@ services:
       - wp_net
     volumes:
       - db_data:/var/lib/mysql
-    container_name: db
 
   wordpress:
+    container_name: wordpress
     build: ./wordpress/
     env_file:
       - .env
@@ -24,6 +25,7 @@ services:
       - wp_data:/var/www/html
 
   nginx:
+    container_name: nginx
     build: ./nginx/
     restart: always
     ports:

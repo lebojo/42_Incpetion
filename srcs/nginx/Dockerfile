@@ -5,7 +5,10 @@ FROM alpine:3.18
 
 #On install nginx
 RUN apk update && apk upgrade \
-	&& apk add --no-cache nginx
+	&& apk add --no-cache nginx openssl
+
+RUN mkdir /ssl
+RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /ssl/jchapell.key -out /ssl/jchapell.crt -subj "/C=FR/ST=Lausanne/L=Lausanne/O=42/OU=42/CN=jchapell"
 
 #On copy du serveur(local) vers le Docker (local -> docker)
 #COPY ./site/index.html /var/www/html/
